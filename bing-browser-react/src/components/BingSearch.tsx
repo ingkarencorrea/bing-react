@@ -5,7 +5,7 @@ import { useSearch } from "../hooks/useSearch";
 function BingSearch() {
 
     const { search, updateSearch } = useSearch()
-    const { results, getResults } = useResults({search})
+    const { results, getResults, loading } = useResults({search})
 
     const handleSubmit = (event : any) => {
         event.preventDefault();
@@ -38,6 +38,7 @@ function BingSearch() {
             </header>
 
             <main>
+                { loading ? <p>Loading ...</p> :
                 <ul>
                     {results.map(result => (
                         <li key={result.id}>
@@ -45,7 +46,7 @@ function BingSearch() {
                             <p>{result.snippet}</p>
                         </li>
                     ))}
-                </ul>
+                </ul>}
             </main>
 
         </div>
