@@ -1,41 +1,42 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useResults } from "../hooks/useResults";
+import { useSearch } from "../hooks/useSearch";
 
 
 function BingSearch() {
-    const [results, setResults] = useState([]);
 
-    useEffect(() => {
-        const apiKey = '608b9f78adbc446ea1248a2a9f7f8e46';
-        const query = 'Developers';
-        const url = `https://api.bing.microsoft.com/v7.0/search?q=${query}`;
+    const { search, updateSearch } = useSearch()
+    const { results, getResults } = useResults({search})
 
-        axios.get(url, {
-            headers: {
-                'Ocp-Apim-Subscription-Key': apiKey
-            }
-        })
-            .then(response => {
-                setResults(response.data.webPages.value);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
+    const handleSubmit = (event : any) => {
+        event.preventDefault();
+        getResults({search});
+    }
+
+    const handleChange = (event : any) => {
+        const newSearch = event.target.value;
+        updateSearch(newSearch)
+    }
+        
 
     return (
         <div>
+
             <header>
                 <h1>Bing ft React</h1>
-                <form >
+                <form onSubmit={handleSubmit}>
                     <div>
                         <input
-                            type="text"
-                            name='query' placeholder='Ask me anything'
+                            value={search}
+                            onChange={handleChange}
+                            name='query' 
+                            placeholder='Ask me anything'
+                            required
                         />
+                        <button onClick={handleSubmit} >Search</button>
                     </div>
                 </form>
             </header>
+
             <main>
                 <ul>
                     {results.map(result => (
